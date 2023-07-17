@@ -24,18 +24,29 @@ class _SecondPage extends State<SecondPage> {
         color: Colors.white,
         child: Column(
             children:[
-              if(!isScroll) getAppBar(),
+              getAppBar(),
               Expanded(child: sampleList()),
             ]
         ));
-    // else {
-    //   return Scaffold(
-    //       body: sampleList()
-    //   );
     // }
   }
-  AppBar getAppBar() {
-    return AppBar(title: Text("My List"),);
+  Visibility getAppBar() {
+    if(isScroll) {
+      return Visibility(child: AppBar(title: Text("My List"),),
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        visible: false,
+      );
+    }
+    else {
+      return Visibility(child: AppBar(title: Text("My List"),),
+      maintainSize: true,
+      maintainAnimation: true,
+      maintainState: true,
+      visible: true,
+    );
+    }
 
   }
   NotificationListener sampleList() {
@@ -57,19 +68,25 @@ class _SecondPage extends State<SecondPage> {
     },);
   }
 
-
   Widget customList(BuildContext context, DataFile info, int index) {
-    if(index != 14) {
-      return ListViewItem(info);
-    }
-    else {
-      return Column(
-        children: [
-          ListViewItem(info),
-          SizedBox(height: 70,)
-        ],
-      );
-    }
+    return Card(
+        child: Container(
+          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          child: Row(
+            children: [
+              Padding(padding: EdgeInsets.fromLTRB(25, 25, 25, 25)),
+              InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailScreen(info: info)));
+                  },
+                  child: Container(child: Text("label  : ${info.desc}",))
+              )
+            ],
+          ),
+        ));
   }
 
   Widget ListViewItem(DataFile info) {
